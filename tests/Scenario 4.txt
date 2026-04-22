@@ -1,0 +1,26 @@
+In early March 2024, the security team at Meridian Financial Group, a mid-sized 
+investment bank headquartered in London, detected unusual outbound traffic originating 
+from several internal workstations in the trading floor network segment.
+
+Forensic investigation revealed that an attacker had gained initial access through a 
+spearphishing email sent to three employees in the finance department. The email 
+contained a malicious Word document that exploited CVE-2023-21716 to execute a 
+PowerShell dropper script.
+
+The dropper downloaded a Cobalt Strike beacon from hxxps://update-service.microsoftedge-cdn[.]net/payload.bin 
+and established a C2 channel to 185.220.101.47. The beacon communicated over HTTPS 
+on port 443 using a malleable C2 profile to blend with legitimate traffic.
+
+The attacker performed credential dumping using a modified version of Mimikatz, 
+then moved laterally across the network using stolen administrator credentials. 
+Several sensitive files related to upcoming merger activity were staged at 
+C:\Users\Public\Temp\ before being exfiltrated to a secondary domain: 
+secure-vault.financedocs[.]io.
+
+The attacker also established persistence by creating a scheduled task named 
+MicrosoftEdgeUpdateTaskMachineUA and dropping a backdoor DLL into 
+C:\Windows\System32\edgeupdate.dll.
+
+Attribution indicators suggest overlap with a known Eastern European financially 
+motivated threat group tracked as FIN7, also known as Carbanak. Contact was made 
+via the attacker-controlled email address ops.handler[@]protonmail.com.

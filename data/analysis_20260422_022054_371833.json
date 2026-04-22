@@ -1,0 +1,391 @@
+{
+    "attempt_id": "8673a090-c983-47ae-9bc0-c118d0013b30",
+    "timestamp": "2026-04-22T06:20:54.370875",
+    "scenario_text": "On Tuesday morning, the finance department of a mid-sized healthcare provider in Virginia began reporting suspicious Microsoft 365 login prompts that appeared immediately after employees clicked a link in what looked like an internal password reset email. The sender display name was \"IT Support Team,\" but the underlying email address used an external domain that resembled the company’s legitimate help desk address.\n\nWithin two hours, several employees entered their usernames, passwords, and multi-factor authentication codes into the fake login page. Security analysts later determined that the phishing page was hosted on a recently registered domain and proxied traffic to the legitimate Microsoft 365 login portal in real time, allowing the attacker to capture session tokens.\n\nUsing the compromised accounts, the threat actor accessed multiple mailboxes belonging to payroll and accounts payable personnel. The attacker created hidden inbox rules that forwarded messages containing keywords such as \"invoice,\" \"payment,\" and \"wire\" to an external account. They also sent follow-up phishing emails from an internal compromised mailbox to other employees, increasing the credibility of the campaign.\n\nLogs showed successful logins from IP addresses associated with a VPS provider in another country, followed by abnormal mailbox access and message searches. Analysts also observed that one account attempted to access the company’s SharePoint environment and downloaded spreadsheets containing vendor banking information. No ransomware was deployed, but the organization believes the objective was business email compromise and financial fraud.\n\nThe company disabled the affected accounts, reset passwords, revoked active sessions, and blocked the phishing domain. Investigators are still unsure whether the same actor has targeted other healthcare organizations, but they suspect a financially motivated group specializing in credential phishing and mailbox abuse.",
+    "extracted_evidence": {
+        "ips": [],
+        "domains": [],
+        "urls": [],
+        "emails": [],
+        "cves": [],
+        "hashes": [],
+        "keywords": [
+            "phishing",
+            "ransomware"
+        ]
+    },
+    "ai_raw_output": {
+        "adversary": {
+            "name": {
+                "value": null,
+                "confidence": 0.0,
+                "source": null,
+                "evidence": []
+            },
+            "aliases": {
+                "value": null,
+                "confidence": 0.0,
+                "source": null,
+                "evidence": []
+            },
+            "motivation": {
+                "value": "Financial",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "the objective was business email compromise and financial fraud.",
+                    "financially motivated group"
+                ]
+            },
+            "attribution": {
+                "value": "Financially motivated group specializing in credential phishing and mailbox abuse",
+                "confidence": 0.8,
+                "source": "inferred",
+                "evidence": [
+                    "they suspect a financially motivated group specializing in credential phishing and mailbox abuse."
+                ]
+            },
+            "intent": {
+                "value": "Business Email Compromise (BEC) and Financial Fraud",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "the organization believes the objective was business email compromise and financial fraud."
+                ]
+            }
+        },
+        "victim": {
+            "organization": {
+                "value": "mid-sized healthcare provider",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "the finance department of a mid-sized healthcare provider"
+                ]
+            },
+            "sector": {
+                "value": "Healthcare",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "mid-sized healthcare provider"
+                ]
+            },
+            "geography": {
+                "value": "Virginia",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "healthcare provider in Virginia"
+                ]
+            },
+            "role": {
+                "value": "Finance Department, Payroll and Accounts Payable Personnel, General Employees",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "the finance department",
+                    "payroll and accounts payable personnel",
+                    "other employees"
+                ]
+            },
+            "impact": {
+                "value": "Credential compromise, mailbox access, data exfiltration (vendor banking information), potential business email compromise and financial fraud",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "several employees entered their usernames, passwords, and multi-factor authentication codes into the fake login page.",
+                    "Using the compromised accounts, the threat actor accessed multiple mailboxes",
+                    "downloaded spreadsheets containing vendor banking information.",
+                    "the organization believes the objective was business email compromise and financial fraud."
+                ]
+            }
+        },
+        "capability": {
+            "description": {
+                "value": "Credential phishing and mailbox abuse leading to data exfiltration and potential financial fraud.",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "credential phishing and mailbox abuse",
+                    "downloaded spreadsheets containing vendor banking information.",
+                    "the objective was business email compromise and financial fraud."
+                ]
+            },
+            "tools": [],
+            "malware": [],
+            "ttps": [
+                "T1566.002: Phishing: Spearphishing Link",
+                "T1550.004: Use Alternate Authentication Material: Web Session Cookie",
+                "T1078.004: Valid Accounts: Cloud Accounts",
+                "T1114.003: Email Collection: Email Forwarding Rule",
+                "T1537: Transfer Data to Cloud Account (SharePoint download)",
+                "T1090: Proxy (for real-time phishing)"
+            ],
+            "vulnerabilities": []
+        },
+        "infrastructure": {
+            "description": {
+                "value": "Phishing page hosted on a recently registered domain, proxied traffic to legitimate login portal, and attacker access from IP addresses associated with a VPS provider in another country.",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "the phishing page was hosted on a recently registered domain",
+                    "proxied traffic to the legitimate Microsoft 365 login portal in real time",
+                    "successful logins from IP addresses associated with a VPS provider in another country"
+                ]
+            },
+            "domains": [
+                "external domain that resembled the company’s legitimate help desk address",
+                "recently registered domain"
+            ],
+            "ips": [
+                "IP addresses associated with a VPS provider in another country"
+            ],
+            "urls": [
+                "link in what looked like an internal password reset email",
+                "fake login page"
+            ],
+            "email_addresses": [
+                "external domain that resembled the company’s legitimate help desk address (sender)",
+                "external account (forwarding destination)"
+            ],
+            "hosts": [
+                "VPS provider in another country"
+            ]
+        },
+        "meta": {
+            "summary": {
+                "value": "A mid-sized healthcare provider in Virginia experienced a credential phishing attack targeting its finance department. Employees received fake Microsoft 365 password reset emails, leading them to a phishing page that captured usernames, passwords, and MFA codes by proxying traffic to the legitimate login portal. The attacker used compromised accounts to access mailboxes of payroll and accounts payable personnel, created hidden inbox rules to forward sensitive emails, sent internal phishing emails, and downloaded vendor banking information from SharePoint. The attack infrastructure included a recently registered phishing domain and IP addresses from a foreign VPS provider. The objective is believed to be business email compromise and financial fraud.",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "On Tuesday morning, the finance department of a mid-sized healthcare provider in Virginia began reporting suspicious Microsoft 365 login prompts that appeared immediately after employees clicked a link in what looked like an internal password reset email.",
+                    "The sender display name was \"IT Support Team,\" but the underlying email address used an external domain that resembled the company’s legitimate help desk address.",
+                    "Within two hours, several employees entered their usernames, passwords, and multi-factor authentication codes into the fake login page.",
+                    "Security analysts later determined that the phishing page was hosted on a recently registered domain and proxied traffic to the legitimate Microsoft 365 login portal in real time, allowing the attacker to capture session tokens.",
+                    "Using the compromised accounts, the threat actor accessed multiple mailboxes belonging to payroll and accounts payable personnel.",
+                    "The attacker created hidden inbox rules that forwarded messages containing keywords such as \"invoice,\" \"payment,\" and \"wire\" to an external account.",
+                    "They also sent follow-up phishing emails from an internal compromised mailbox to other employees, increasing the credibility of the campaign.",
+                    "Logs showed successful logins from IP addresses associated with a VPS provider in another country, followed by abnormal mailbox access and message searches.",
+                    "Analysts also observed that one account attempted to access the company’s SharePoint environment and downloaded spreadsheets containing vendor banking information.",
+                    "No ransomware was deployed, but the organization believes the objective was business email compromise and financial fraud."
+                ]
+            },
+            "timestamps": {
+                "value": "Tuesday morning (initial report), Within two hours (credential compromise)",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "On Tuesday morning",
+                    "Within two hours"
+                ]
+            },
+            "analyst_notes": {
+                "value": "Investigators are still unsure whether the same actor has targeted other healthcare organizations, but they suspect a financially motivated group specializing in credential phishing and mailbox abuse. The company disabled affected accounts, reset passwords, revoked active sessions, and blocked the phishing domain.",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "Investigators are still unsure whether the same actor has targeted other healthcare organizations, but they suspect a financially motivated group specializing in credential phishing and mailbox abuse.",
+                    "The company disabled the affected accounts, reset passwords, revoked active sessions, and blocked the phishing domain."
+                ]
+            },
+            "validation_warnings": null
+        }
+    },
+    "final_model": {
+        "adversary": {
+            "name": {
+                "value": null,
+                "confidence": 0.0,
+                "source": "unknown",
+                "evidence": [],
+                "approved": false,
+                "edited_by_user": false,
+                "notes": null
+            },
+            "aliases": [],
+            "motivation": {
+                "value": "Financial",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "the objective was business email compromise and financial fraud.",
+                    "financially motivated group"
+                ],
+                "approved": false,
+                "edited_by_user": false,
+                "notes": null
+            },
+            "attribution": {
+                "value": "Financially motivated group specializing in credential phishing and mailbox abuse",
+                "confidence": 0.8,
+                "source": "inferred",
+                "evidence": [
+                    "they suspect a financially motivated group specializing in credential phishing and mailbox abuse."
+                ],
+                "approved": false,
+                "edited_by_user": false,
+                "notes": null
+            },
+            "intent": {
+                "value": "Business Email Compromise (BEC) and Financial Fraud",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "the organization believes the objective was business email compromise and financial fraud."
+                ],
+                "approved": false,
+                "edited_by_user": false,
+                "notes": null
+            }
+        },
+        "victim": {
+            "organization": {
+                "value": "mid-sized healthcare provider",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "the finance department of a mid-sized healthcare provider"
+                ],
+                "approved": false,
+                "edited_by_user": false,
+                "notes": null
+            },
+            "sector": {
+                "value": "Healthcare",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "mid-sized healthcare provider"
+                ],
+                "approved": false,
+                "edited_by_user": false,
+                "notes": null
+            },
+            "geography": {
+                "value": "Virginia",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "healthcare provider in Virginia"
+                ],
+                "approved": false,
+                "edited_by_user": false,
+                "notes": null
+            },
+            "role": {
+                "value": "Finance Department, Payroll and Accounts Payable Personnel, General Employees",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "the finance department",
+                    "payroll and accounts payable personnel",
+                    "other employees"
+                ],
+                "approved": false,
+                "edited_by_user": false,
+                "notes": null
+            },
+            "impact": {
+                "value": "Credential compromise, mailbox access, data exfiltration (vendor banking information), potential business email compromise and financial fraud",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "several employees entered their usernames, passwords, and multi-factor authentication codes into the fake login page.",
+                    "Using the compromised accounts, the threat actor accessed multiple mailboxes",
+                    "downloaded spreadsheets containing vendor banking information.",
+                    "the organization believes the objective was business email compromise and financial fraud."
+                ],
+                "approved": false,
+                "edited_by_user": false,
+                "notes": null
+            }
+        },
+        "capability": {
+            "description": {
+                "value": "Credential phishing and mailbox abuse leading to data exfiltration and potential financial fraud.",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "credential phishing and mailbox abuse",
+                    "downloaded spreadsheets containing vendor banking information.",
+                    "the objective was business email compromise and financial fraud."
+                ],
+                "approved": false,
+                "edited_by_user": false,
+                "notes": null
+            },
+            "tools": [],
+            "malware": [],
+            "ttps": [
+                "T1566.002: Phishing: Spearphishing Link",
+                "T1550.004: Use Alternate Authentication Material: Web Session Cookie",
+                "T1078.004: Valid Accounts: Cloud Accounts",
+                "T1114.003: Email Collection: Email Forwarding Rule",
+                "T1537: Transfer Data to Cloud Account (SharePoint download)",
+                "T1090: Proxy (for real-time phishing)"
+            ],
+            "vulnerabilities": []
+        },
+        "infrastructure": {
+            "description": {
+                "value": "Phishing page hosted on a recently registered domain, proxied traffic to legitimate login portal, and attacker access from IP addresses associated with a VPS provider in another country.",
+                "confidence": 1.0,
+                "source": "explicit",
+                "evidence": [
+                    "the phishing page was hosted on a recently registered domain",
+                    "proxied traffic to the legitimate Microsoft 365 login portal in real time",
+                    "successful logins from IP addresses associated with a VPS provider in another country"
+                ],
+                "approved": false,
+                "edited_by_user": false,
+                "notes": null
+            },
+            "domains": [
+                "external domain that resembled the company’s legitimate help desk address",
+                "recently registered domain"
+            ],
+            "ips": [
+                "IP addresses associated with a VPS provider in another country"
+            ],
+            "urls": [
+                "link in what looked like an internal password reset email",
+                "fake login page"
+            ],
+            "email_addresses": [
+                "external domain that resembled the company’s legitimate help desk address (sender)",
+                "external account (forwarding destination)"
+            ],
+            "hosts": [
+                "VPS provider in another country"
+            ]
+        },
+        "meta": {
+            "summary": "",
+            "timestamps": [],
+            "analyst_notes": [],
+            "validation_warnings": []
+        }
+    },
+    "validation_results": {
+        "is_valid": true,
+        "warnings": [
+            "No key fields have been approved by a human analyst. Please review and approve AI-generated values."
+        ],
+        "completeness_score": 1.0,
+        "confidence_score": 0.98,
+        "review_score": 0.0,
+        "stats": {
+            "total_key_fields": 10,
+            "populated_key_fields": 9,
+            "low_confidence_fields": 0,
+            "inferred_fields": 1,
+            "approved_fields": 0,
+            "fields_missing_evidence": 0,
+            "ttp_count": 6,
+            "malformed_ttp_count": 0
+        }
+    },
+    "human_edits": {}
+}

@@ -60,17 +60,7 @@ def _load_attempt_into_session(attempt: dict) -> None:
         "parsed_ai":   {},
     }
 
-    # Attempt to reconstruct a live DiamondModel via STIX round-trip
     try:
-        from models import DiamondModel
-        from core.diamond_builder import DiamondModelBuilder
-
-        # Build a throwaway DiamondModel from model_dict field values
-        # by re-importing through STIX for structural consistency
-        mapper  = StixMapper()
-
-        # Manually reconstruct a minimal DiamondModel from the dict
-        # so StixMapper has something to work with
         temp_model = _dict_to_diamond_model(model_dict)
         if temp_model is not None:
             result["model"]      = temp_model
@@ -83,8 +73,8 @@ def _load_attempt_into_session(attempt: dict) -> None:
 
 def _dict_to_diamond_model(model_dict: dict):
     """
-    Attempt to reconstruct a DiamondModel from a model_dict by round-tripping
-    through StixMapper and StixImporter. Returns None on failure.
+    Attempt to reconstruct a DiamondModel from a model_dict.
+    Returns None on failure.
 
     Args:
         model_dict: A serialized DiamondModel dictionary.
@@ -93,10 +83,7 @@ def _dict_to_diamond_model(model_dict: dict):
         A DiamondModel instance or None.
     """
     try:
-        from models import (
-            DiamondModel, Adversary, Victim, Capability,
-            Infrastructure, Meta, FieldValue,
-        )
+        from models import DiamondModel
 
         model = DiamondModel()
 
@@ -602,7 +589,6 @@ def _render_history_tab() -> None:
         timestamp  = attempt.get("timestamp", "Unknown time")
         model_dict = attempt.get("final_model") or {}
 
-        # Extract preview values
         adversary_name = (
             model_dict.get("adversary", {})
             .get("name", {})
@@ -613,15 +599,15 @@ def _render_history_tab() -> None:
             .get("organization", {})
             .get("value") or "Unknown victim"
         )
-        summary = (
-            model_dict.get("meta", {}).get("summary") or ""
-        )
+        summary = model_dict.get("meta", {}).get("summary") or ""
         preview = summary[:120] + "…" if len(summary) > 120 else summary
 
-        label = f"🕒 {timestamp[:19]}  ·  🎭 {adversary_name}  →  🏢 {victim_name}"
+        label = (
+            f"🕒 {timestamp[:19]}  ·  "
+            f"🎭 {adversary_name}  →  🏢 {victim_name}"
+        )
 
         with st.expander(label, expanded=(i == 0)):
-            # Summary preview
             if preview:
                 st.caption(f"📝 {preview}")
             else:
@@ -631,7 +617,6 @@ def _render_history_tab() -> None:
 
             col_stix, col_load = st.columns([1, 1])
 
-            # --- STIX download ---
             with col_stix:
                 stix_bytes = None
                 try:
@@ -660,7 +645,6 @@ def _render_history_tab() -> None:
                         help="Could not generate STIX for this entry.",
                     )
 
-            # --- Load into session ---
             with col_load:
                 if st.button(
                     "📂 Load Into Session",
@@ -668,10 +652,11 @@ def _render_history_tab() -> None:
                     use_container_width=True,
                 ):
                     _load_attempt_into_session(attempt)
-                    st.success(f"Loaded attempt from {timestamp[:19]} into session.")
+                    st.success(
+                        f"Loaded attempt from {timestamp[:19]} into session."
+                    )
                     st.rerun()
 
-            # Raw JSON debug
             with st.expander("🛠 Raw JSON (debug)", expanded=False):
                 st.json(attempt)
 
@@ -729,7 +714,9 @@ def run_app() -> None:
             st.error("Please enter your Google Gemini API key before analyzing.")
             return
         if not scenario_text.strip():
-            st.error("Please provide a scenario — either by typing or uploading a file.")
+            st.error(
+                "Please provide a scenario — either by typing or uploading a file."
+            )
             return
 
         with st.spinner("Running analysis..."):
@@ -757,9 +744,8 @@ def run_app() -> None:
         except Exception as e:
             st.warning(f"Could not save attempt history: {e}")
 
-    # --- Render results if available ---
+    # --- Render results or fallback tabs ---
     if "last_result" not in st.session_state:
-        # Still render history and import tabs even without a current result
         tab_import, tab_history = st.tabs(["Import", "History"])
         with tab_import:
             _render_import_tab()
